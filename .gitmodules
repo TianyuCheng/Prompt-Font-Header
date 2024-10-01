@@ -1,0 +1,3 @@
+[submodule "promptfont"]
+	path = promptfont
+	url = https://github.com/Shinmera/promptfont.git
