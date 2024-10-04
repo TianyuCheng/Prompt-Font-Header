@@ -12,6 +12,7 @@ def process(glyph: dict):
     return {
         "name": f"PF_{name}",
         "code": glyph.get("code", ""),
+        "value": glyph.get("codepoint", ""),
         "formatted": formatted,
     }
 
@@ -25,7 +26,7 @@ with open(source, "w") as f:
     print("#ifndef PROMPT_FONT_H", file=f)
     print("#define PROMPT_FONT_H", file=f)
     print(file=f)
-    print('#define FONT_ICON_FILE_NAME_PROMPT "promptfont.ttf"', file=f)
+    print('#define PF_ICON_FONT_FILE_NAME "promptfont.ttf"', file=f)
     print(file=f)
     print("// clang-format off", file=f)
     align = max([len(glyph["name"]) for glyph in glyphs])
@@ -36,5 +37,16 @@ with open(source, "w") as f:
         padding = " " * (align - len(name) + 2)
         print(f'#define {name}{padding} \"{format}\" // {code}', file=f)
     print("// clang-format on", file=f)
+    print(file=f)
+
+    print("// clang-format off", file=f)
+    for glyph in glyphs:
+        name = glyph["name"]
+        code = glyph["code"]
+        value = glyph["value"]
+        padding = " " * (align - len(name) + 2)
+        print(f'#define {name}_HEX{padding} 0x{value:x} // {code}', file=f)
+    print("// clang-format on", file=f)
+
     print(file=f)
     print("#endif // PROMPT_FONT_H", file=f)
